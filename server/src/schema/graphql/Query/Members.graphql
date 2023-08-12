@@ -1,0 +1,5 @@
+type Members {
+  name: String!
+  email: String!
+  city: String!
+}

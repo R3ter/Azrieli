@@ -1,0 +1,6 @@
+type Mutation {
+  login(loginData: loginData!): Credential!
+  addAccount(userData: RegisterData!): Credential!
+  createMovie(movieInput: movieInput!): ResultMsg!
+  createMember(memberInput: memberInput!): ResultMsg!
+}

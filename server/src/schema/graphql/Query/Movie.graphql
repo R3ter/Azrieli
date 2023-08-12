@@ -1,0 +1,6 @@
+type Movie {
+  name: String!
+  ImageUrl: String!
+  yearPremiered: Int!
+  genres: [String]!
+}

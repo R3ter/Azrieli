@@ -1,0 +1,6 @@
+input movieInput {
+  name: String!
+  ImageUrl: String!
+  yearPremiered: Int!
+  genres: [String]
+}

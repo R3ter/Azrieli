@@ -1,0 +1,5 @@
+input memberInput {
+  name: String!
+  city: String!
+  email: String!
+}
