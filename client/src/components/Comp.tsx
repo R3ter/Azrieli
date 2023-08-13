@@ -24,7 +24,11 @@ import {
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-export default function Comp({ movie }) {
+export default function Comp({
+  movie,
+}: {
+  movie: { ImageUrl: string; name: string; yearPremiered: number };
+}) {
   const [isLoading, setLoading] = useState(false);
   const [isOpen, setOpen] = useState(false);
   return (
@@ -39,7 +43,7 @@ export default function Comp({ movie }) {
       padding={4}
     >
       <Flex flex={1} bg="blue.200">
-        <Image objectFit="cover" boxSize="100%" src={movie.image} />
+        <Image objectFit="cover" boxSize="100%" src={movie.ImageUrl} />
       </Flex>
       <Stack
         flex={1}
@@ -52,15 +56,13 @@ export default function Comp({ movie }) {
         <Heading fontSize={"2xl"} fontFamily={"body"}>
           {movie.name}
         </Heading>
-        <Text fontWeight={600} color={"gray.500"} size="sm" mb={4}>
-          @john-Wick
-        </Text>
+
         <Text
           textAlign={"center"}
           color={useColorModeValue("gray.700", "gray.400")}
           px={3}
         >
-          {movie.about}
+         Year Premiered: {movie.yearPremiered}
         </Text>
         <Stack align={"center"} justify={"center"} direction={"row"} mt={6}>
           <Badge
@@ -98,36 +100,22 @@ export default function Comp({ movie }) {
           alignItems={"center"}
         >
           <Button
-            disabled={isLoading}
-            onClick={() => {
-              setLoading(true);
-              fetch("http://localhost:8000/api/auth/sendCode", {
-                headers: {
-                  "x-access-token": JSON.parse(
-                    localStorage.getItem("credential")
-                  ).token,
-                  "Content-Type": "application/json",
-                },
-              }).then(() => {
-                setOpen(true);
-              });
-            }}
             flex={1}
             fontSize={"sm"}
             rounded={"full"}
             bg={"blue.400"}
             color={"white"}
-            boxShadow={
-              "0px 1px 25px -5px rgb(66 153 225 / 48%), 0 10px 10px -5px rgb(66 153 225 / 43%)"
-            }
-            _hover={{
-              bg: "blue.500",
-            }}
-            _focus={{
-              bg: "blue.500",
-            }}
           >
-            {!isLoading ? "Subscribe" : <Spinner />}
+            Edit
+          </Button>
+          <Button
+            flex={1}
+            fontSize={"sm"}
+            rounded={"full"}
+            bg={"red.400"}
+            color={"white"}
+          >
+            Remove
           </Button>
         </Stack>
       </Stack>
@@ -144,7 +132,7 @@ export default function Comp({ movie }) {
           <ModalCloseButton />
           <ModalBody>
             <Text>The code was sent to the email you signed up with.</Text>
-            <Divider size={10} margin={10} />
+            <Divider size={"10"} margin={10} />
             <Center>
               <HStack>
                 <PinInput onComplete={(e) => {}}>

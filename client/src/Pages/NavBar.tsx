@@ -13,38 +13,62 @@ import {
   Stack,
   useColorMode,
   Center,
+  Tabs,
+  Tab,
+  TabIndicator,
+  TabList,
+  TabPanel,
+  TabPanels,
 } from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { getToken, logout } from "../../context/userConext";
 
 export default function Nav() {
   const { colorMode, toggleColorMode } = useColorMode();
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const location = useLocation();
   const isLogin = getToken();
-  console.log(isLogin);
   const navigate = useNavigate();
   return (
     <>
       <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
-          {isLogin ? (
-            <Link to={"/"}>
-              <Button
-                bg={"blue.400"}
-                color={"white"}
-                width={"100%"}
-                _hover={{
-                  bg: "blue.500",
+          <Tabs
+            defaultIndex={
+              location.pathname == "/"
+                ? 0
+                : location.pathname == "/members"
+                ? 1
+                : 2
+            }
+            position="relative"
+            variant="unstyled"
+          >
+            <TabList>
+              <Tab
+                onClick={() => {
+                  navigate("/");
                 }}
               >
-                Home
-              </Button>
-            </Link>
-          ) : (
-            <Box></Box>
-          )}
+                Movies
+              </Tab>
+              <Tab
+                onClick={() => {
+                  navigate("/members");
+                }}
+              >
+                Members
+              </Tab>
+              <Tab>Subscriptions</Tab>
+            </TabList>
+            <TabIndicator
+              mt="-1.5px"
+              height="2px"
+              bg="blue.500"
+              borderRadius="1px"
+            />
+          </Tabs>
           <Flex alignItems={"center"}>
             <Stack direction={"row"} spacing={7}>
               <Button onClick={toggleColorMode}>

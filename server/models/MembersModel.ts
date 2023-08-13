@@ -22,6 +22,7 @@ const MembersSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
+    unique: true,
     validate: (value) => {
       if (validator.isEmail(value)) return true;
       throw new Error("email is invalid");

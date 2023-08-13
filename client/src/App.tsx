@@ -6,14 +6,14 @@ import ChakraTheme from "@chakra-ui/theme";
 import SignUp from "./Pages/SignUp";
 import NavBar from "./Pages/NavBar";
 import HomePage from "./Pages/HomePage";
-import SearchComp from "./Pages/SearchComp";
-import AddMovie from "./Pages/AddMovie";
 import {
   ApolloClient,
   InMemoryCache,
   ApolloProvider,
   gql,
 } from "@apollo/client";
+import SearchComp from "./components/SearchComp";
+import Members from "./Pages/Members";
 
 function App() {
   const client = new ApolloClient({
@@ -38,12 +38,16 @@ function App() {
           element: <HomePage />,
         },
         {
-          path: "/SearchComp",
-          element: <SearchComp />,
+          path: "/members",
+          element: <Members />,
         },
         {
-          path: "/AddMovie",
-          element: <AddMovie />,
+          path: "/subscriptions",
+          element: <HomePage />,
+        },
+        {
+          path: "/SearchComp",
+          element: <SearchComp />,
         },
       ],
     },
