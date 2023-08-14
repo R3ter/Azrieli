@@ -1,4 +1,5 @@
 type Query {
   getAllMovies(search: String): [Movie]!
   getAllMembers: [Members]!
+  getAllSubs: [Subs]!
 }

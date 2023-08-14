@@ -1,0 +1,5 @@
+type Subs {
+  movie: Movie!
+  member: Members!
+  createdAt: String
+}

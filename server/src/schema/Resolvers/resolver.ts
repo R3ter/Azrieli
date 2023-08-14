@@ -8,9 +8,10 @@ import createMovie from "./mutation/createMovie";
 import login from "./mutation/login";
 import GetAllMovies from "./query/GetAllMovies";
 import getAllMembers from "./query/getAllMembers";
-
+import getAllSubs from "./query/getAllSubs";
 export default {
   Query: {
+    getAllSubs,
     getAllMovies: GetAllMovies,
     getAllMembers,
   },

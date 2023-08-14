@@ -9,6 +9,11 @@ import {
   Spinner,
   Box,
   Center,
+  Collapse,
+  useDisclosure,
+  List,
+  ListIcon,
+  ListItem,
 } from "@chakra-ui/react";
 
 import { useEffect, useState } from "react";
@@ -17,14 +22,16 @@ import { getToken } from "../../context/userConext";
 import { useMutation, useQuery } from "@apollo/client";
 import GET_ALL_MOVIES from "../graphql/queries/GET_ALL_MOVIES";
 import SearchComp from "../components/SearchComp";
-import { AddIcon, BellIcon, EmailIcon } from "@chakra-ui/icons";
-import { MdBuild, MdCall } from "react-icons/md";
+import { AddIcon, BellIcon, EmailIcon, PlusSquareIcon } from "@chakra-ui/icons";
+import { MdBuild, MdCall, MdCheckCircle, MdSettings } from "react-icons/md";
 import { FaLocationDot } from "react-icons/fa6";
 import { BiSolidTrashAlt } from "react-icons/bi";
 import GET_ALL_MEMBERS from "../graphql/queries/GET_ALL_MEMBERS";
 import AddMemberModel from "../components/AddMemberModel";
 import EditMember from "../components/EditMember";
 import REMOVE_MEMBER from "../graphql/mutations/REMOVE_MEMBER";
+import AddSubModal from "../components/AddSubModal";
+import GET_ALL_SUBS from "../graphql/queries/GET_ALL_SUBS";
 
 interface IMember {
   name: string;
@@ -34,13 +41,13 @@ interface IMember {
 }
 export default function () {
   const navigate = useNavigate();
-
   useEffect(() => {
     if (!localStorage.getItem("credential")) {
       navigate("/login");
     }
   });
   const { data: members, loading, refetch } = useQuery(GET_ALL_MEMBERS);
+  const { data: subs } = useQuery(GET_ALL_SUBS);
   return (
     <div>
       <Center>
@@ -52,7 +59,7 @@ export default function () {
         {loading && <Spinner />}
         {members &&
           members.getAllMembers.map((member: IMember, index: number) => (
-            <Member refetch={refetch} member={member} />
+            <Member subs={subs} refetch={refetch} member={member} />
           ))}
       </Center>
     </div>
@@ -61,20 +68,30 @@ export default function () {
 const Member = ({
   member,
   refetch,
+  subs,
 }: {
   member: IMember;
   refetch: Function;
+  subs: any;
 }) => {
   const [mutate, { loading: loadingRemove }] = useMutation(REMOVE_MEMBER, {
     variables: { id: member._id },
     onCompleted: () => refetch(),
   });
+  const { isOpen, onToggle } = useDisclosure();
+
   return (
     <Card size={"lg"} paddingInline={20} align="center">
       <CardHeader>
-        <Heading size="md"> {member.name}</Heading>
+        <Heading size="lg"> {member.name}</Heading>
       </CardHeader>
-      <CardBody flexDir={"column"} display={"flex"} gap={4}>
+      <CardBody
+        flexDir={"column"}
+        display={"flex"}
+        width={"100%"}
+        textAlign={"center"}
+        gap={4}
+      >
         <Box
           display={"flex"}
           as="button"
@@ -87,7 +104,7 @@ const Member = ({
           padding={2}
         >
           <EmailIcon alignSelf={"center"} marginRight={2} />
-          <Text>{member.email}</Text>
+          <Text width={"100%"}>{member.email}</Text>
         </Box>
         <Box
           display={"flex"}
@@ -118,6 +135,28 @@ const Member = ({
         >
           Remove
         </Button>
+        <Button onClick={onToggle}>View Subscriptions</Button>
+        <Collapse in={isOpen} animateOpacity>
+          <Box
+            maxWidth={"200"}
+            p="10px"
+            color="purple.400"
+            bg="transparent"
+            rounded="md"
+            border={"1px"}
+            shadow="md"
+          >
+            <List spacing={3}>
+              {subs.map((e) => (
+                <ListItem>
+                  <ListIcon as={MdCheckCircle} color="green.200" />
+                  {e.movie.name}
+                </ListItem>
+              ))}
+            </List>
+          </Box>
+          <AddSubModal />
+        </Collapse>
       </CardFooter>
     </Card>
   );

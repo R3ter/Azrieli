@@ -13,3 +13,7 @@ export const logout = () => {
 export const getToken = () => {
   return JSON.parse(localStorage.getItem("credential") || "{}")?.token;
 };
+
+export const getName = () => {
+  return JSON.parse(localStorage.getItem("credential") || "{}")?.name;
+};

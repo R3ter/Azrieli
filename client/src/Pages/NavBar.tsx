@@ -19,11 +19,13 @@ import {
   TabList,
   TabPanel,
   TabPanels,
+  Text,
+  Badge,
 } from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { getToken, logout } from "../../context/userConext";
+import { getName, getToken, logout } from "../../context/userConext";
 
 export default function Nav() {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -71,6 +73,13 @@ export default function Nav() {
               borderRadius="1px"
             />
           </Tabs>
+          {isLogin && (
+            <Text fontSize="xl" fontWeight="bold">
+              <Badge ml="1" fontSize="0.8em" colorScheme="green">
+                {getName()}
+              </Badge>
+            </Text>
+          )}
           <Flex alignItems={"center"}>
             <Stack direction={"row"} spacing={7}>
               <Button onClick={toggleColorMode}>
@@ -131,7 +140,7 @@ export default function Nav() {
                     </Center>
                     <br />
                     <Center>
-                      <p>Username</p>
+                      <p>{getName()}</p>
                     </Center>
                     <br />
                     <MenuDivider />
