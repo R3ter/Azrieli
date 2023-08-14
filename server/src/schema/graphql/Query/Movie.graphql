@@ -1,4 +1,5 @@
 type Movie {
+  _id: String!
   name: String!
   ImageUrl: String!
   yearPremiered: Int!

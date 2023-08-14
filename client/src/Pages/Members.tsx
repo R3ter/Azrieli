@@ -14,7 +14,7 @@ import {
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getToken } from "../../context/userConext";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import GET_ALL_MOVIES from "../graphql/queries/GET_ALL_MOVIES";
 import SearchComp from "../components/SearchComp";
 import { AddIcon, BellIcon, EmailIcon } from "@chakra-ui/icons";
@@ -23,14 +23,18 @@ import { FaLocationDot } from "react-icons/fa6";
 import { BiSolidTrashAlt } from "react-icons/bi";
 import GET_ALL_MEMBERS from "../graphql/queries/GET_ALL_MEMBERS";
 import AddMemberModel from "../components/AddMemberModel";
+import EditMember from "../components/EditMember";
+import REMOVE_MEMBER from "../graphql/mutations/REMOVE_MEMBER";
 
 interface IMember {
   name: string;
   email: string;
   city: string;
+  _id: string;
 }
 export default function () {
   const navigate = useNavigate();
+
   useEffect(() => {
     if (!localStorage.getItem("credential")) {
       navigate("/login");
@@ -42,19 +46,29 @@ export default function () {
       <Center>
         <AddMemberModel refetch={refetch} />
       </Center>
-      <div
+      <Center
         style={{ display: "flex", gap: 50, margin: "50px", flexWrap: "wrap" }}
       >
         {loading && <Spinner />}
         {members &&
           members.getAllMembers.map((member: IMember, index: number) => (
-            <Member member={member} />
+            <Member refetch={refetch} member={member} />
           ))}
-      </div>
+      </Center>
     </div>
   );
 }
-const Member = ({ member }: { member: IMember }) => {
+const Member = ({
+  member,
+  refetch,
+}: {
+  member: IMember;
+  refetch: Function;
+}) => {
+  const [mutate, { loading: loadingRemove }] = useMutation(REMOVE_MEMBER, {
+    variables: { id: member._id },
+    onCompleted: () => refetch(),
+  });
   return (
     <Card size={"lg"} paddingInline={20} align="center">
       <CardHeader>
@@ -90,15 +104,18 @@ const Member = ({ member }: { member: IMember }) => {
         </Box>
       </CardBody>
       <CardFooter display={"flex"} flexDir={"column"} gap={5}>
+        <EditMember
+          memberData={{ ...member, id: member._id }}
+          refetch={refetch}
+        />
         <Button
-          leftIcon={<MdBuild />}
-          variant="outline"
-          width="200px"
-          colorScheme="blue"
+          onClick={() => {
+            mutate();
+          }}
+          isLoading={loadingRemove}
+          leftIcon={<BiSolidTrashAlt size={20} />}
+          colorScheme="red"
         >
-          Edit
-        </Button>
-        <Button leftIcon={<BiSolidTrashAlt size={20} />} colorScheme="red">
           Remove
         </Button>
       </CardFooter>

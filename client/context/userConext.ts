@@ -1,8 +1,9 @@
-export const login = (token: string) => {
+export const login = (token: string, name: string) => {
   localStorage.setItem(
     "credential",
     JSON.stringify({
       token: token,
+      name,
     })
   );
 };
@@ -10,6 +11,5 @@ export const logout = () => {
   localStorage.removeItem("credential");
 };
 export const getToken = () => {
-  console.log(localStorage.getItem("credential"));
   return JSON.parse(localStorage.getItem("credential") || "{}")?.token;
 };

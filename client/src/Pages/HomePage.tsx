@@ -1,4 +1,4 @@
-import { Center, Spinner } from "@chakra-ui/react";
+import { Center, Spinner, Text } from "@chakra-ui/react";
 
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -6,7 +6,7 @@ import { getToken } from "../../context/userConext";
 import { useQuery } from "@apollo/client";
 import GET_ALL_MOVIES from "../graphql/queries/GET_ALL_MOVIES";
 import SearchComp from "../components/SearchComp";
-import Comp from "../components/Comp";
+import Movie from "../components/Movie";
 import AddMovieModel from "../components/AddMovieModel";
 
 export default function HomePage() {
@@ -20,7 +20,7 @@ export default function HomePage() {
   return (
     <div>
       <br />
-      <SearchComp />
+      <SearchComp refetch={refetch} />
       <br />
       <Center>
         <AddMovieModel refetch={refetch} />
@@ -29,7 +29,12 @@ export default function HomePage() {
         {loading ? (
           <Spinner />
         ) : (
-          movies.getAllMovies.map((movie: any) => <Comp movie={movie} />)
+          movies.getAllMovies.map((movie: any) => (
+            <Movie refetch={refetch} movie={{ ...movie, id: movie._id }} />
+          ))
+        )}
+        {!loading && movies.getAllMovies.length === 0 && (
+          <Text>No Movies was found!</Text>
         )}
       </Center>
     </div>

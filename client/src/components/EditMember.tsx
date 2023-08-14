@@ -14,27 +14,46 @@ import {
   Input,
   ModalFooter,
   useToast,
+  Image,
 } from "@chakra-ui/react";
-import React, { useRef } from "react";
-import CREATE_MEMBER from "../graphql/mutations/CREATE_MEMBER";
+import React, { useEffect, useRef, useState } from "react";
+import CREATE_MOVIE from "../graphql/mutations/CREATE_MOVIE";
+import MultiSelectMenu from "./MultiSelectComp";
+import Genres from "../util/Genres";
+import UPDATE_MOVIE from "../graphql/mutations/UPDATE_MOVIE";
+import { MdBuild } from "react-icons/md";
+import UPDATE_MEMBER from "../graphql/mutations/UPDATE_MEMBER";
 
-export default function ({ refetch }: { refetch: Function }) {
+export default function ({
+  refetch,
+  memberData: { name, email, id, city },
+}: {
+  refetch: Function;
+  memberData: {
+    id: string;
+    name: string;
+    email: string;
+    city: string;
+  };
+}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  useEffect(() => {}, []);
   const toast = useToast();
-  const form = useRef({ name: "", email: "", city: "" });
-  const [mutate, { loading }] = useMutation(CREATE_MEMBER, {
+  const form = useRef({ name, email, city });
+
+  const [mutate, { loading }] = useMutation(UPDATE_MEMBER, {
     onCompleted: (data) => {
-      if (data.createMember.result) {
+      if (data.EditMember.result) {
         refetch();
         onClose();
-        form.current = { name: "", email: "", city: "" };
         toast({
-          title: `Member was created!`,
+          title: `Member was Updated!`,
           status: "success",
         });
       } else {
         toast({
-          title: `${data.createMember.msg}!`,
+          title: `${data.EditMember.msg}!`,
           status: "error",
         });
       }
@@ -46,16 +65,13 @@ export default function ({ refetch }: { refetch: Function }) {
   return (
     <>
       <Button
+        leftIcon={<MdBuild />}
+        variant="outline"
+        width="200px"
+        colorScheme="blue"
         onClick={onOpen}
-        size="md"
-        border="2px"
-        rightIcon={<AddIcon />}
-        borderColor="green.500"
-        bgColor={"green.700"}
-        color={"white"}
-        margin={10}
       >
-        Create Member
+        Edit
       </Button>
 
       <Modal
@@ -72,6 +88,7 @@ export default function ({ refetch }: { refetch: Function }) {
             <FormControl>
               <FormLabel>name</FormLabel>
               <Input
+                defaultValue={form.current.name}
                 onChange={(e) => (form.current.name = e.target.value)}
                 ref={initialRef}
                 placeholder="Member's name"
@@ -81,6 +98,7 @@ export default function ({ refetch }: { refetch: Function }) {
             <FormControl mt={4}>
               <FormLabel>Email</FormLabel>
               <Input
+                defaultValue={form.current.email}
                 onChange={(e) => (form.current.email = e.target.value)}
                 placeholder="Member's email"
               />
@@ -88,6 +106,7 @@ export default function ({ refetch }: { refetch: Function }) {
             <FormControl mt={4}>
               <FormLabel>City</FormLabel>
               <Input
+                defaultValue={form.current.city}
                 onChange={(e) => (form.current.city = e.target.value)}
                 placeholder="Member's city"
               />
@@ -98,7 +117,7 @@ export default function ({ refetch }: { refetch: Function }) {
             <Button
               isLoading={loading}
               onClick={() => {
-                mutate({ variables: { memberInput: { ...form.current } } });
+                mutate({ variables: { id, data: { ...form.current } } });
               }}
               colorScheme="blue"
               mr={3}

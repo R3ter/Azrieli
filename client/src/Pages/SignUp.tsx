@@ -18,6 +18,9 @@ import { FcGoogle } from "react-icons/fc";
 import { useState, useRef, useEffect } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { Link, useNavigate } from "react-router-dom";
+import { useMutation } from "@apollo/client";
+import ADD_ACCOUNT from "../graphql/mutations/ADD_ACCOUNT";
+import { login } from "../../context/userConext";
 
 export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
@@ -27,6 +30,16 @@ export default function SignUp() {
     if (localStorage.getItem("credential")) {
       navigate("/");
     }
+  });
+  const [mutate, { loading }] = useMutation(ADD_ACCOUNT, {
+    onCompleted(e) {
+      if (!e.addAccount.error) {
+        login(e.addAccount.token, e.addAccount.name);
+        navigate("/");
+      } else {
+        setErr(e.addAccount.msg);
+      }
+    },
   });
   const form = useRef({ firstName: "", lastName: "", password: "", email: "" });
   return (
@@ -118,23 +131,19 @@ export default function SignUp() {
                     setErr("all inputs are required!");
                     return;
                   }
-                  fetch("http://localhost:8000/api/users", {
-                    method: "post",
-                    body: JSON.stringify({
-                      password: form.current.password,
-                      username: form.current.email,
-                      firstName: form.current.firstName,
-                      lastName: form.current.lastName,
-                    }),
-                    headers: {
-                      "Content-Type": "application/json",
+                  mutate({
+                    variables: {
+                      userData: {
+                        username: form.current.email,
+                        password: form.current.password,
+                        name:
+                          form.current.firstName + " " + form.current.lastName,
+                      },
                     },
-                  }).then(async (e) => {
-                    e = await e.json();
-                    navigate("/login");
                   });
                 }}
                 loadingText="Submitting"
+                isLoading={loading}
                 size="lg"
                 bg={"blue.400"}
                 color={"white"}

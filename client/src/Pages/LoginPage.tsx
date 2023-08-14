@@ -78,9 +78,8 @@ export default function SimpleCard() {
                       },
                     },
                     onCompleted: (e) => {
-                      console.log(e);
                       if (!e.login.error) {
-                        login(e.login.token);
+                        login(e.login.token, e.Credential.name);
                         navigate("/");
                       }
                     },

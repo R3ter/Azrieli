@@ -11,26 +11,38 @@ import {
   ModalBody,
   ModalCloseButton,
   ModalContent,
-  ModalFooter,
   ModalHeader,
   ModalOverlay,
   PinInput,
   PinInputField,
-  Spinner,
   Stack,
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import Genres, { GenresColor } from "../util/Genres";
+import { useMutation } from "@apollo/client";
+import REMOVE_MOVIE from "../graphql/mutations/REMOVE_MOVIE";
+import EditMovie from "./EditMovie";
 
 export default function Comp({
   movie,
+  refetch,
 }: {
-  movie: { ImageUrl: string; name: string; yearPremiered: number };
+  refetch: Function;
+  movie: {
+    id: string;
+    ImageUrl: string;
+    name: string;
+    yearPremiered: number;
+    genres: string[];
+  };
 }) {
-  const [isLoading, setLoading] = useState(false);
   const [isOpen, setOpen] = useState(false);
+  const [mutate, { loading }] = useMutation(REMOVE_MOVIE, {
+    variables: { id: movie.id },
+    onCompleted: () => refetch(),
+  });
   return (
     <Stack
       borderWidth="1px"
@@ -62,33 +74,30 @@ export default function Comp({
           color={useColorModeValue("gray.700", "gray.400")}
           px={3}
         >
-         Year Premiered: {movie.yearPremiered}
+          Year Premiered: {movie.yearPremiered}
         </Text>
-        <Stack align={"center"} justify={"center"} direction={"row"} mt={6}>
-          <Badge
-            px={2}
-            py={1}
-            bg={useColorModeValue("gray.50", "gray.800")}
-            fontWeight={"400"}
-          >
-            #Action
-          </Badge>
-          <Badge
-            px={2}
-            py={1}
-            bg={useColorModeValue("gray.50", "gray.800")}
-            fontWeight={"400"}
-          >
-            #Fight
-          </Badge>
-          <Badge
-            px={2}
-            py={1}
-            bg={useColorModeValue("gray.50", "gray.800")}
-            fontWeight={"400"}
-          >
-            #Thriller
-          </Badge>
+        <Stack
+          className="removeScroll"
+          wrap={"wrap"}
+          align={"center"}
+          justify={"center"}
+          display={"flex"}
+          overflowY={"scroll"}
+          direction={"row"}
+          maxHeight={"100px"}
+        >
+          {movie.genres.map((e: string) => {
+            return (
+              <Badge
+                borderRadius={15}
+                margin={1}
+                padding={1}
+                colorScheme={GenresColor[e] || "blue"}
+              >
+                {e}
+              </Badge>
+            );
+          })}
         </Stack>
 
         <Stack
@@ -99,16 +108,12 @@ export default function Comp({
           justifyContent={"space-between"}
           alignItems={"center"}
         >
+          <EditMovie movieData={movie} refetch={refetch} />
           <Button
-            flex={1}
-            fontSize={"sm"}
-            rounded={"full"}
-            bg={"blue.400"}
-            color={"white"}
-          >
-            Edit
-          </Button>
-          <Button
+            isLoading={loading}
+            onClick={() => {
+              mutate();
+            }}
             flex={1}
             fontSize={"sm"}
             rounded={"full"}
@@ -123,7 +128,6 @@ export default function Comp({
         isOpen={isOpen}
         onClose={() => {
           setOpen(false);
-          setLoading(false);
         }}
       >
         <ModalOverlay />

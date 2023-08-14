@@ -16,33 +16,44 @@ import {
   useToast,
   Image,
 } from "@chakra-ui/react";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CREATE_MOVIE from "../graphql/mutations/CREATE_MOVIE";
 import MultiSelectMenu from "./MultiSelectComp";
 import Genres from "../util/Genres";
+import UPDATE_MOVIE from "../graphql/mutations/UPDATE_MOVIE";
 
-export default function ({ refetch }: { refetch: Function }) {
+export default function ({
+  refetch,
+  movieData: { ImageUrl, genres: oldGenres, id, name, yearPremiered },
+}: {
+  refetch: Function;
+  movieData: {
+    id: string;
+    ImageUrl: string;
+    name: string;
+    yearPremiered: number;
+    genres: string[];
+  };
+}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  useEffect(() => {}, []);
   const toast = useToast();
-  const form = useRef({ name: "", ImageUrl: "", yearPremiered: 0 });
-  const genres = useRef([]);
-  const [image, setImage] = useState(
-    "https://removal.ai/wp-content/uploads/2021/02/no-img.png"
-  );
-  const [mutate, { loading }] = useMutation(CREATE_MOVIE, {
+  const form = useRef({ name, ImageUrl, yearPremiered });
+  const genres = useRef(oldGenres);
+  const [image, setImage] = useState(ImageUrl);
+  const [mutate, { loading }] = useMutation(UPDATE_MOVIE, {
     onCompleted: (data) => {
-      if (data.createMovie.result) {
+      if (data.EditMovie.result) {
         refetch();
         onClose();
-        form.current = { name: "", ImageUrl: "", yearPremiered: 0 };
         toast({
-          title: `Movie was created!`,
+          title: `Movie was Updated!`,
           status: "success",
         });
       } else {
         toast({
-          title: `${data.createMovie.msg}!`,
+          title: `${data.EditMovie.msg}!`,
           status: "error",
         });
       }
@@ -54,16 +65,14 @@ export default function ({ refetch }: { refetch: Function }) {
   return (
     <>
       <Button
-        onClick={onOpen}
-        size="md"
-        border="2px"
-        rightIcon={<AddIcon />}
-        borderColor="green.500"
-        bgColor={"green.700"}
-        margin={10}
+        flex={1}
+        fontSize={"sm"}
+        rounded={"full"}
+        bg={"blue.400"}
         color={"white"}
+        onClick={onOpen}
       >
-        Create Movie
+        Edit
       </Button>
 
       <Modal
@@ -74,7 +83,7 @@ export default function ({ refetch }: { refetch: Function }) {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Create Movie</ModalHeader>
+          <ModalHeader>Edit Movie</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <Image
@@ -89,6 +98,7 @@ export default function ({ refetch }: { refetch: Function }) {
               <Input
                 onChange={(e) => (form.current.name = e.target.value)}
                 ref={initialRef}
+                defaultValue={name}
                 placeholder="Movie name"
               />
             </FormControl>
@@ -102,6 +112,7 @@ export default function ({ refetch }: { refetch: Function }) {
                   form.current.ImageUrl = e.target.value;
                 }}
                 placeholder="Https://example.com/image.jpg"
+                defaultValue={ImageUrl}
               />
             </FormControl>
             <FormControl mt={4}>
@@ -110,6 +121,7 @@ export default function ({ refetch }: { refetch: Function }) {
                 type="number"
                 onChange={(e) => (form.current.yearPremiered = +e.target.value)}
                 placeholder="Premiered year"
+                defaultValue={yearPremiered}
               />
             </FormControl>
             <MultiSelectMenu value={genres} label="Genres" options={Genres} />
@@ -121,7 +133,8 @@ export default function ({ refetch }: { refetch: Function }) {
               onClick={() => {
                 mutate({
                   variables: {
-                    movieInput: { ...form.current, genres: genres.current },
+                    id,
+                    data: { ...form.current, genres: genres.current },
                   },
                 });
               }}

@@ -3,4 +3,8 @@ type Mutation {
   addAccount(userData: RegisterData!): Credential!
   createMovie(movieInput: movieInput!): ResultMsg!
   createMember(memberInput: memberInput!): ResultMsg!
+  RemoveMovie(id: String!): Boolean!
+  RemoveMember(id: String!): Boolean!
+  EditMovie(id: String!, data: movieInput!): ResultMsg!
+  EditMember(id: String!, data: memberInput!): ResultMsg!
 }

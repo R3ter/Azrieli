@@ -1,17 +1,17 @@
-import { checkToken } from "../../../../auth/Token";
-import MovieModel from "../../../../models/MovieModel";
+import MembersModel from "../../../../models/MembersModel";
 type AddMovieResult = {
   result: boolean;
   msg?: string;
 };
 export default async (
   _,
-  { movieInput: { name, ImageUrl, yearPremiered, genres } },
+  { id, data: { name, city, email } },
   { req }
 ): Promise<AddMovieResult> => {
   //   checkToken(req.headers.token);
-  return await new MovieModel({ name, ImageUrl, yearPremiered, genres })
-    .save()
+  return await MembersModel.findByIdAndUpdate(id, {
+    $set: { city, email, name },
+  })
     .then(() => ({ result: true }))
     .catch((error) => ({ msg: error.message, result: false }));
 };

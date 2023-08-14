@@ -6,12 +6,13 @@ type AddMovieResult = {
 };
 export default async (
   _,
-  { movieInput: { name, ImageUrl, yearPremiered, genres } },
+  { id, data: { name, ImageUrl, yearPremiered, genres } },
   { req }
 ): Promise<AddMovieResult> => {
   //   checkToken(req.headers.token);
-  return await new MovieModel({ name, ImageUrl, yearPremiered, genres })
-    .save()
+  return await MovieModel.findByIdAndUpdate(id, {
+    $set: { name, ImageUrl, yearPremiered, genres },
+  })
     .then(() => ({ result: true }))
     .catch((error) => ({ msg: error.message, result: false }));
 };

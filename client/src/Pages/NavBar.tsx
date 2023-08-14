@@ -45,23 +45,25 @@ export default function Nav() {
             position="relative"
             variant="unstyled"
           >
-            <TabList>
-              <Tab
-                onClick={() => {
-                  navigate("/");
-                }}
-              >
-                Movies
-              </Tab>
-              <Tab
-                onClick={() => {
-                  navigate("/members");
-                }}
-              >
-                Members
-              </Tab>
-              <Tab>Subscriptions</Tab>
-            </TabList>
+            {isLogin && (
+              <TabList>
+                <Tab
+                  onClick={() => {
+                    navigate("/");
+                  }}
+                >
+                  Movies
+                </Tab>
+                <Tab
+                  onClick={() => {
+                    navigate("/members");
+                  }}
+                >
+                  Members
+                </Tab>
+                <Tab>Subscriptions</Tab>
+              </TabList>
+            )}
             <TabIndicator
               mt="-1.5px"
               height="2px"
