@@ -12,6 +12,9 @@
   },
   "author": "",
   "license": "ISC",
+  "engines": {
+    "node": "14.20.1"
+  },
   "dependencies": {
     "@graphql-tools/load-files": "^6.6.1",
     "cookie-parser": "^1.4.6",
@@ -20,7 +23,6 @@
     "es-dirname": "^0.1.0",
     "express": "^4.18.2",
     "graphql": "^16.6.0",
-    "node": "14.20.1",
     "graphql-fields": "^2.0.3",
     "graphql-yoga": "^3.7.3",
     "i": "^0.3.7",
