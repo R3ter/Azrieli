@@ -7,15 +7,14 @@ const Token_1 = require("../../../../auth/Token");
 const UserModel_1 = __importDefault(require("../../../../models/UserModel"));
 exports.default = async (_, args, context) => {
     const user = await UserModel_1.default.findOne({
-        email: args.loginData.username,
+        username: args.loginData.username,
         password: args.loginData.password,
     });
     if (user) {
         const token = (0, Token_1.signToken)({
             id: user._id,
             name: user.name,
-            username: user.passportNumber,
-            role: user.role,
+            username: user.username,
         });
         context.res.cookie("token", token);
         return {

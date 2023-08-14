@@ -4,27 +4,31 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const AddAccount_1 = __importDefault(require("./mutation/AddAccount"));
-const Deposit_1 = __importDefault(require("./mutation/Deposit"));
-const EditCredit_1 = __importDefault(require("./mutation/EditCredit"));
+const EditMember_1 = __importDefault(require("./mutation/EditMember"));
+const EditMovie_1 = __importDefault(require("./mutation/EditMovie"));
+const RemoveMember_1 = __importDefault(require("./mutation/RemoveMember"));
+const RemoveMovie_1 = __importDefault(require("./mutation/RemoveMovie"));
+const createMember_1 = __importDefault(require("./mutation/createMember"));
+const createMovie_1 = __importDefault(require("./mutation/createMovie"));
 const login_1 = __importDefault(require("./mutation/login"));
-const setUserActive_1 = __importDefault(require("./mutation/setUserActive"));
-const Transfer_1 = __importDefault(require("./mutation/Transfer"));
-const WithdrawMoney_1 = __importDefault(require("./mutation/WithdrawMoney"));
-const getAllUsers_1 = __importDefault(require("./query/getAllUsers"));
-const getUserByPN_1 = __importDefault(require("./query/getUserByPN"));
+const GetAllMovies_1 = __importDefault(require("./query/GetAllMovies"));
+const getAllMembers_1 = __importDefault(require("./query/getAllMembers"));
+const getAllSubs_1 = __importDefault(require("./query/getAllSubs"));
 exports.default = {
     Query: {
-        getAllUsers: getAllUsers_1.default,
-        getUserByPN: getUserByPN_1.default,
+        getAllSubs: getAllSubs_1.default,
+        getAllMovies: GetAllMovies_1.default,
+        getAllMembers: getAllMembers_1.default,
     },
     Mutation: {
+        RemoveMember: RemoveMember_1.default,
+        EditMember: EditMember_1.default,
+        EditMovie: EditMovie_1.default,
+        RemoveMovie: RemoveMovie_1.default,
+        createMovie: createMovie_1.default,
         login: login_1.default,
         addAccount: AddAccount_1.default,
-        Deposit: Deposit_1.default,
-        editCredit: EditCredit_1.default,
-        WithdrawMoney: WithdrawMoney_1.default,
-        Transfer: Transfer_1.default,
-        setUserActive: setUserActive_1.default,
+        createMember: createMember_1.default,
     },
 };
 //# sourceMappingURL=resolver.js.map

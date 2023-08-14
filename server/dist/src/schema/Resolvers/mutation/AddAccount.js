@@ -5,16 +5,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const Token_1 = require("../../../../auth/Token");
 const UserModel_1 = __importDefault(require("../../../../models/UserModel"));
-exports.default = async (_, { userData: { name, passportNumber, password } }, context) => {
-    return await new UserModel_1.default({ name, passportNumber, password })
+exports.default = async (_, { userData: { name, username, password } }, context) => {
+    return await new UserModel_1.default({ name, username, password })
         .save()
         .then((e) => {
         return {
             token: (0, Token_1.signToken)({
-                username: passportNumber,
+                username,
                 id: e._id,
                 name,
-                role: "User",
             }),
             name,
             msg: "",
@@ -25,7 +24,7 @@ exports.default = async (_, { userData: { name, passportNumber, password } }, co
         if (error.name == "MongoServerError" && error.code == 11000) {
             return {
                 error: true,
-                msg: "this passport number is already in data",
+                msg: "username already exists!",
             };
         }
         if (error.name === "ValidationError")

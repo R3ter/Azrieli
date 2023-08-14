@@ -1,0 +1,1 @@
+{"version":3,"file":"getAllSubs.js","sourceRoot":"","sources":["../../../../../src/schema/Resolvers/query/getAllSubs.ts"],"names":[],"mappings":";;;;;AAAA,qFAA6D;AAE7D,kBAAe,KAAK,EAAE,CAAC,EAAE,IAAI,EAAE,OAAO,EAAE,EAAE;IACxC,OAAO,MAAM,uBAAa,CAAC,IAAI,CAAC,EAAE,CAAC,CAAC,QAAQ,CAAC,OAAO,CAAC,CAAC,QAAQ,CAAC,QAAQ,CAAC,CAAC;AAC3E,CAAC,CAAC"}

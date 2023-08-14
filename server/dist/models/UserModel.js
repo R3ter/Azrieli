@@ -5,16 +5,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const userSchema = new mongoose_1.default.Schema({
-    passportNumber: {
+    username: {
         type: String,
         required: true,
         unique: true,
         validate: (value) => {
-            if (!isNaN(value)) {
-                if (value.length == 9)
-                    return true;
-            }
-            throw new Error("The passport number must consist of 9 digits and should not contain any letters or special characters.");
+            if (value.length >= 5)
+                return true;
+            throw new Error("username must be 5 or higher char long");
         },
     },
     name: {
@@ -35,25 +33,6 @@ const userSchema = new mongoose_1.default.Schema({
             }
             return true;
         },
-    },
-    active: {
-        type: Boolean,
-        default: false,
-    },
-    cash: {
-        type: Number,
-        default: 0,
-        min: 0,
-    },
-    credit: {
-        type: Number,
-        default: 0,
-        min: 0,
-    },
-    role: {
-        type: String,
-        enum: ["user", "admin"],
-        default: "user",
     },
 });
 exports.default = mongoose_1.default.model("users", userSchema);
