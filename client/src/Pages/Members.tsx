@@ -16,7 +16,7 @@ import {
   ListItem,
 } from "@chakra-ui/react";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getToken } from "../../context/userConext";
 import { useMutation, useQuery } from "@apollo/client";
@@ -56,11 +56,14 @@ export default function () {
       <Center
         style={{ display: "flex", gap: 50, margin: "50px", flexWrap: "wrap" }}
       >
-        {loading && <Spinner />}
-        {members &&
+        {loading ? (
+          <Spinner />
+        ) : (
+          members &&
           members.getAllMembers.map((member: IMember, index: number) => (
-            <Member subs={subs} refetch={refetch} member={member} />
-          ))}
+            <Member subs={subs?.getAllSubs} refetch={refetch} member={member} />
+          ))
+        )}
       </Center>
     </div>
   );
@@ -74,6 +77,7 @@ const Member = ({
   refetch: Function;
   subs: any;
 }) => {
+  const memberId = useRef("");
   const [mutate, { loading: loadingRemove }] = useMutation(REMOVE_MEMBER, {
     variables: { id: member._id },
     onCompleted: () => refetch(),
@@ -147,15 +151,17 @@ const Member = ({
             shadow="md"
           >
             <List spacing={3}>
-              {subs.map((e) => (
-                <ListItem>
-                  <ListIcon as={MdCheckCircle} color="green.200" />
-                  {e.movie.name}
-                </ListItem>
-              ))}
+              {!subs || subs.length == 0
+                ? "No sub"
+                : subs.map((e) => (
+                    <ListItem>
+                      <ListIcon as={MdCheckCircle} color="green.200" />
+                      {e.movie.name}
+                    </ListItem>
+                  ))}
             </List>
           </Box>
-          <AddSubModal />
+          <AddSubModal memberId={member._id} selectedMemberId={memberId} />
         </Collapse>
       </CardFooter>
     </Card>

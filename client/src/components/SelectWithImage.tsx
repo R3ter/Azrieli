@@ -10,8 +10,10 @@ import {
 import { useRef, useState } from "react";
 
 export default ({
+  onChange,
   arr,
 }: {
+  onChange: (e: any) => void;
   arr: { label: string; imageUrl: string; id: string }[];
 }) => {
   const ref = useRef("");
@@ -21,11 +23,12 @@ export default ({
       <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
         {selected}
       </MenuButton>
-      <MenuList>
+      <MenuList onChange={onChange}>
         {arr.map(({ id, imageUrl, label }, index) => (
           <MenuItem
             onClick={() => {
               ref.current = id;
+              onclick(id);
               setSelected(label);
             }}
             minH="48px"

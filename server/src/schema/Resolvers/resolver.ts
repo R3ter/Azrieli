@@ -5,6 +5,7 @@ import RemoveMember from "./mutation/RemoveMember";
 import RemoveMovie from "./mutation/RemoveMovie";
 import createMember from "./mutation/createMember";
 import createMovie from "./mutation/createMovie";
+import createSub from "./mutation/createSub";
 import login from "./mutation/login";
 import GetAllMovies from "./query/GetAllMovies";
 import getAllMembers from "./query/getAllMembers";
@@ -16,6 +17,7 @@ export default {
     getAllMembers,
   },
   Mutation: {
+    createSub,
     RemoveMember,
     EditMember,
     EditMovie,

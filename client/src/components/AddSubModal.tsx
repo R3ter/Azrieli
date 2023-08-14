@@ -13,22 +13,37 @@ import {
   ModalFooter,
   useDisclosure,
   Text,
+  Spinner,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import SelectWithImage from "./SelectWithImage";
+import { useMutation, useQuery } from "@apollo/client";
+import GET_ALL_MOVIES from "../graphql/queries/GET_ALL_MOVIES";
+import CREATE_SUB from "../graphql/mutations/CREATE_SUB";
 
-export default () => {
+export default ({
+  memberId,
+  selectedMemberId,
+}: {
+  memberId: string;
+  selectedMemberId: { current: string };
+}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [error, setError] = useState("");
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
+  const [mutate, { loading: loadingMutate }] = useMutation(CREATE_SUB);
+  const { loading, data: movies } = useQuery(GET_ALL_MOVIES);
   return (
     <>
       <Button
         marginTop={"2"}
         width={"100%"}
         colorScheme="green"
-        onClick={onOpen}
+        onClick={() => {
+          onOpen();
+          selectedMemberId.current = memberId;
+        }}
         variant="outline"
         rightIcon={<AddIcon />}
       >
@@ -46,22 +61,32 @@ export default () => {
           <ModalHeader>Select the movie</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <SelectWithImage
-              arr={[
-                { id: "daw", imageUrl: "adwwd", label: "dwaadwwad" },
-                { id: "daw", imageUrl: "adwwd", label: "dwaadwwad" },
-              ]}
-            />
+            {loading ? (
+              <Spinner />
+            ) : (
+              <SelectWithImage
+                onChange={(e) => {
+                  console.log(e);
+                }}
+                arr={movies.getAllMovies.map((e) => ({
+                  id: e._id,
+                  imageUrl: e.ImageUrl,
+                  label: e.name,
+                }))}
+              />
+            )}
             <Text color={"red.400"}>{error}</Text>
           </ModalBody>
 
           <ModalFooter>
             <Button
               onClick={() => {
-                setError("select movie!");
+                setError("select a movie!");
+                mutate({ variables: { memberId: selectedMemberId.current } });
               }}
               colorScheme="blue"
               mr={3}
+              isLoading={loadingMutate}
             >
               Subscribe
             </Button>
