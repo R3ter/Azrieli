@@ -38,6 +38,6 @@
     "mocha": "^10.2.0",
     "nodemon": "^2.0.21",
     "sinon": "^15.0.2",
-    "typescript": "^5.0.2"
+    "typescript": "^5.1.6"
   }
 }
