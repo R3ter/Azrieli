@@ -1,0 +1,1 @@
+{"version":3,"file":"removeSub.js","sourceRoot":"","sources":["../../../../../src/schema/Resolvers/mutation/removeSub.ts"],"names":[],"mappings":";;;;;AAAA,qFAA6D;AAE7D,kBAAe,KAAK,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE;IACjC,OAAO,MAAM,uBAAa,CAAC,iBAAiB,CAAC,EAAE,CAAC;SAC7C,IAAI,CAAC,GAAG,EAAE,CAAC,IAAI,CAAC;SAChB,KAAK,CAAC,GAAG,EAAE,CAAC,KAAK,CAAC,CAAC;AACxB,CAAC,CAAC"}

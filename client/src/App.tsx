@@ -45,10 +45,6 @@ function App() {
           path: "/subscriptions",
           element: <HomePage />,
         },
-        {
-          path: "/SearchComp",
-          element: <SearchComp />,
-        },
       ],
     },
   ]);

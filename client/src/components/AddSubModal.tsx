@@ -46,9 +46,9 @@ export default ({
   const { loading, data: movies } = useQuery(GET_ALL_MOVIES);
   const arr = movies?.getAllMovies
     .filter(
-      (e) =>
+      (e: any) =>
         !subs.find(
-          (a) =>
+          (a: any) =>
             a.movie._id == e._id && a.member._id == selectedMemberId.current
         )
     )
