@@ -63,7 +63,6 @@ export default function Nav() {
                 >
                   Members
                 </Tab>
-                <Tab>Subscriptions</Tab>
               </TabList>
             )}
             <TabIndicator
