@@ -17,7 +17,7 @@ import Members from "./Pages/Members";
 
 function App() {
   const client = new ApolloClient({
-    uri: "http://localhost:4000/graphql",
+    uri: "https://movies-dashboard.onrender.com/graphql",
     cache: new InMemoryCache(),
   });
   const router = createBrowserRouter([
