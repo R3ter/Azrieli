@@ -1,4 +1,5 @@
 type Subs {
+  _id: String!
   movie: Movie!
   member: Members!
   createdAt: String

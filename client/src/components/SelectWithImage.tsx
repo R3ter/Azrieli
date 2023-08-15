@@ -28,7 +28,7 @@ export default ({
           <MenuItem
             onClick={() => {
               ref.current = id;
-              onclick(id);
+              onChange(id);
               setSelected(label);
             }}
             minH="48px"

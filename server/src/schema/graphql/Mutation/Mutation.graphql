@@ -8,4 +8,5 @@ type Mutation {
   EditMovie(id: String!, data: movieInput!): ResultMsg!
   EditMember(id: String!, data: memberInput!): ResultMsg!
   createSub(memberId: String!, movieId: String!): Boolean!
+  removeSub(id: String!): Boolean!
 }

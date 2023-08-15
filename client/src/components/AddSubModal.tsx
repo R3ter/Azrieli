@@ -15,7 +15,7 @@ import {
   Text,
   Spinner,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import SelectWithImage from "./SelectWithImage";
 import { useMutation, useQuery } from "@apollo/client";
 import GET_ALL_MOVIES from "../graphql/queries/GET_ALL_MOVIES";
@@ -24,16 +24,39 @@ import CREATE_SUB from "../graphql/mutations/CREATE_SUB";
 export default ({
   memberId,
   selectedMemberId,
+  refetch,
+  subs,
 }: {
+  subs: any;
+  refetch: Function;
   memberId: string;
   selectedMemberId: { current: string };
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const movieId = useRef("");
   const [error, setError] = useState("");
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
-  const [mutate, { loading: loadingMutate }] = useMutation(CREATE_SUB);
+  const [mutate, { loading: loadingMutate }] = useMutation(CREATE_SUB, {
+    onCompleted: () => {
+      onClose();
+      refetch();
+    },
+  });
   const { loading, data: movies } = useQuery(GET_ALL_MOVIES);
+  const arr = movies?.getAllMovies
+    .filter(
+      (e) =>
+        !subs.find(
+          (a) =>
+            a.movie._id == e._id && a.member._id == selectedMemberId.current
+        )
+    )
+    .map((e: any) => ({
+      id: e._id,
+      imageUrl: e.ImageUrl,
+      label: e.name,
+    }));
   return (
     <>
       <Button
@@ -63,33 +86,44 @@ export default ({
           <ModalBody pb={6}>
             {loading ? (
               <Spinner />
+            ) : arr.length == 0 ? (
+              <Text>this member has subscribed to all movies</Text>
             ) : (
               <SelectWithImage
                 onChange={(e) => {
-                  console.log(e);
+                  movieId.current = e;
+                  setError("");
                 }}
-                arr={movies.getAllMovies.map((e) => ({
-                  id: e._id,
-                  imageUrl: e.ImageUrl,
-                  label: e.name,
-                }))}
+                arr={arr}
               />
             )}
             <Text color={"red.400"}>{error}</Text>
           </ModalBody>
 
           <ModalFooter>
-            <Button
-              onClick={() => {
-                setError("select a movie!");
-                mutate({ variables: { memberId: selectedMemberId.current } });
-              }}
-              colorScheme="blue"
-              mr={3}
-              isLoading={loadingMutate}
-            >
-              Subscribe
-            </Button>
+            {arr?.length > 0 && (
+              <Button
+                onClick={() => {
+                  if (!movieId.current) {
+                    setError("select a movie!");
+                    return;
+                  }
+                  setError("");
+                  mutate({
+                    variables: {
+                      memberId: selectedMemberId.current,
+                      movieId: movieId.current,
+                    },
+                  });
+                  movieId.current = "";
+                }}
+                colorScheme="blue"
+                mr={3}
+                isLoading={loadingMutate}
+              >
+                Subscribe
+              </Button>
+            )}
             <Button onClick={onClose}>Cancel</Button>
           </ModalFooter>
         </ModalContent>

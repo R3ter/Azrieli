@@ -2,14 +2,14 @@ import mongoose from "mongoose";
 import validator from "validator";
 
 export interface ISubscription {
-  MovieID: string;
-  MemberID: string;
+  movie: string;
+  member: string;
 }
 
 const SubscriptionSchema = new mongoose.Schema(
   {
-    movie: { type: mongoose.Types.ObjectId, ref: "Movie" },
-    member: { type: mongoose.Types.ObjectId, ref: "Member" },
+    movie: { required: true, type: mongoose.Types.ObjectId, ref: "Movie" },
+    member: { required: true, type: mongoose.Types.ObjectId, ref: "Members" },
   },
   {
     timestamps: true,

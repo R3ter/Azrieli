@@ -33,6 +33,7 @@ export default function ({ refetch }: { refetch: Function }) {
   const [mutate, { loading }] = useMutation(CREATE_MOVIE, {
     onCompleted: (data) => {
       if (data.createMovie.result) {
+        setImage("https://removal.ai/wp-content/uploads/2021/02/no-img.png");
         refetch();
         onClose();
         form.current = { name: "", ImageUrl: "", yearPremiered: 0 };

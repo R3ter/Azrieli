@@ -6,5 +6,5 @@ export default async function () {
     "mongodb+srv://" +
       "R3ter:g0TtK9acQdS8nBAG" +
       "@cluster0.wvgdcdz.mongodb.net/?retryWrites=true&w=majority"
-  );
+  )
 }
