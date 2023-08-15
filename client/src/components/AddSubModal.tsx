@@ -47,7 +47,7 @@ export default ({
   const arr = movies?.getAllMovies
     .filter(
       (e: any) =>
-        !subs.find(
+        !subs?.find(
           (a: any) =>
             a.movie._id == e._id && a.member._id == selectedMemberId.current
         )
