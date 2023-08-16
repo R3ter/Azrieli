@@ -1,4 +1,3 @@
-import * as React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
 import LoginPage from "./Pages/LoginPage";
@@ -6,13 +5,7 @@ import ChakraTheme from "@chakra-ui/theme";
 import SignUp from "./Pages/SignUp";
 import NavBar from "./Pages/NavBar";
 import HomePage from "./Pages/HomePage";
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  gql,
-} from "@apollo/client";
-import SearchComp from "./components/SearchComp";
+import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import Members from "./Pages/Members";
 
 function App() {

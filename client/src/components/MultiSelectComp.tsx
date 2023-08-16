@@ -21,6 +21,7 @@ const MultiSelectMenu = (props: MultiSelectMenuProps): JSX.Element => {
     props.value.current
   );
   props.value.current = selectedOptions;
+
   return (
     <Menu closeOnSelect={false}>
       {({ onClose }: { onClose: Function }) => (
@@ -57,7 +58,7 @@ const MultiSelectMenu = (props: MultiSelectMenuProps): JSX.Element => {
               <MenuItem
                 onClick={() => {
                   setSelectedOptions([]);
-
+                  props.value.current = [];
                   onClose();
                 }}
               >
